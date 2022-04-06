@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/fs"
 	"log"
+	"strings"
 	"sync"
 )
 
@@ -140,8 +141,8 @@ func InitWappalyzerDB(wr embed.FS, file_ string) error {
 		}
 
 		// 测试ICON是否读取正常
-		if val.ICON != "" {
-			_, err = fs.ReadFile(wr_sub, "src/drivers/webextension/images/icons/"+val.ICON)
+		if val.ICON != "" && !strings.Contains(val.ICON, "<") {
+			_, err = fs.ReadFile(wr_sub, fmt.Sprintf("src/drivers/webextension/images/icons/%s", val.ICON))
 			if err != nil {
 				return err
 			}
@@ -149,9 +150,23 @@ func InitWappalyzerDB(wr embed.FS, file_ string) error {
 		}
 		icon_null_count++
 	}
-
 	log.Println(fmt.Sprintf("wappalyzer fingers count %d, groups count %d, categories count %d, no icon count %d", len(schemas), len(groups), len(categories), icon_null_count))
 	return nil
+}
+
+func listdir(wr_sub fs.FS) {
+	dir, _ := fs.ReadDir(wr_sub, ".")
+	for i := 0; i < len(dir); i++ {
+		if dir[i].IsDir() {
+			sub, err := fs.Sub(wr_sub, dir[i].Name())
+			if err != nil {
+				continue
+			}
+			listdir(sub)
+			continue
+		}
+		fmt.Println(dir[i].Name())
+	}
 }
 
 /*
