@@ -135,7 +135,7 @@ func (w *Wappalyzer) DetectDNS(domain string) {
 			}
 			break
 		default:
-			fmt.Println("found no dns type", value.DNS)
+			w.PrintError("found no dns type", value.DNS)
 		}
 	}
 }
@@ -180,7 +180,7 @@ func (w *Wappalyzer) DetectRobots(req_url string) {
 			}
 			break
 		default:
-			fmt.Println("found no url type", value.XHR)
+			w.PrintError("found no url type", value.XHR)
 		}
 	}
 }
@@ -216,7 +216,7 @@ func (w *Wappalyzer) text(text string) {
 			}
 			break
 		default:
-			fmt.Println("found no text type", value.XHR)
+			w.PrintError("found no text type", value.XHR)
 		}
 	}
 }
@@ -237,7 +237,7 @@ func (w *Wappalyzer) css(body string) {
 			}
 			break
 		default:
-			fmt.Println("found no css type", value.XHR)
+			w.PrintError("found no css type", value.XHR)
 		}
 	}
 }
@@ -258,7 +258,7 @@ func (w *Wappalyzer) url(full_url string) {
 			}
 			break
 		default:
-			fmt.Println("found no url type", value.XHR)
+			w.PrintError("found no url type", value.XHR)
 		}
 	}
 }
@@ -279,7 +279,7 @@ func (w *Wappalyzer) xhr(xhr_url string) {
 			}
 			break
 		default:
-			fmt.Println("found no xhr type", value.XHR)
+			w.PrintError("found no xhr type", value.XHR)
 		}
 	}
 }
@@ -307,7 +307,7 @@ func (w *Wappalyzer) html(body string) {
 			}
 			break
 		default:
-			fmt.Println("HTML found no type", value.HTML)
+			w.PrintError("HTML found no type", value.HTML)
 		}
 	}
 }
@@ -420,7 +420,7 @@ func (w *Wappalyzer) dom() chromedp.Action {
 									}
 									break
 								default:
-									fmt.Println("found no dom type", name, err)
+									w.PrintError("found no dom type", name, err)
 								}
 							}
 						}
@@ -483,7 +483,7 @@ func (w *Wappalyzer) dom() chromedp.Action {
 									}
 									break
 								default:
-									fmt.Println("found no dom type", name, err)
+									w.PrintError("found no dom type", name, err)
 								}
 							}
 						}
@@ -491,7 +491,7 @@ func (w *Wappalyzer) dom() chromedp.Action {
 				}
 				break
 			default:
-				fmt.Println("found no doms type", value.DOM)
+				w.PrintError("found no doms type", value.DOM)
 				os.Exit(1)
 			}
 		}
@@ -575,7 +575,7 @@ func (w *Wappalyzer) meta() chromedp.Action {
 				}
 				break
 			default:
-				fmt.Println(name, "meta found no type", value.Meta)
+				w.PrintError(name, "meta found no type", value.Meta)
 				os.Exit(1)
 			}
 		}
@@ -624,7 +624,7 @@ func (w *Wappalyzer) scriptsrc() chromedp.Action {
 				}
 				break
 			default:
-				fmt.Println(name, "script src found no type", value.Meta)
+				w.PrintError(name, "script src found no type", value.Meta)
 				os.Exit(1)
 			}
 		}

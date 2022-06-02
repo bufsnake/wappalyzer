@@ -1,7 +1,6 @@
 package wappalyzer
 
 import (
-	"log"
 	regexp2 "regexp"
 	"strconv"
 	"strings"
@@ -36,20 +35,20 @@ func (w *Wappalyzer) index(s, subStr string) int {
 func (w *Wappalyzer) regexp(regexp string, data string) (exist bool, version_ string, confidence int) {
 	regexp, confidence, err := w.getConfidence(regexp)
 	if err != nil {
-		log.Println(err)
+		w.PrintError(err)
 		return false, "", confidence
 	}
 
 	regexp, version, err := w.getVersion(regexp)
 	if err != nil {
-		log.Println(err)
+		w.PrintError(err)
 		return false, "", confidence
 	}
 
 	// TODO: panic: regexp: Compile(`sites\/(?!default|all).*\/files`): error parsing regexp: invalid or unsupported Perl syntax: `(?!`
 	compile, err := regexp2.Compile(regexp)
 	if err != nil {
-		log.Println(err)
+		w.PrintError(err)
 		return false, "", confidence
 	}
 
