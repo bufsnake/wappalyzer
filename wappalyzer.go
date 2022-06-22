@@ -144,7 +144,7 @@ func InitWappalyzerDB(wr embed.FS, file_ string) error {
 		if val.ICON != "" && !strings.Contains(val.ICON, "<") {
 			_, err = fs.ReadFile(wr_sub, fmt.Sprintf("src/drivers/webextension/images/icons/%s", val.ICON))
 			if err != nil {
-				return err
+				log.Println(err)
 			}
 			continue
 		}
