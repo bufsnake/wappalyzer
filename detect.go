@@ -315,7 +315,7 @@ func (w *Wappalyzer) html(body string) {
 // 已测试
 func (w *Wappalyzer) cookie() chromedp.Action {
 	return chromedp.ActionFunc(func(ctx context.Context) error {
-		cookies, err := network.GetAllCookies().Do(ctx)
+		cookies, err := network.GetCookies().Do(ctx)
 		if err != nil {
 			return err
 		}
