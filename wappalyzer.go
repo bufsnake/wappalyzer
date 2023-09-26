@@ -71,80 +71,70 @@ func InitWappalyzerDB(wr embed.FS, file_ string) error {
 		// 测试是否有未知类型
 		_, err = TypeTest(val.Implies)
 		if err != nil {
-			fmt.Println(name, err)
-			return err
+			return fmt.Errorf("%s %s", name, err)
 		}
 		_, err = TypeTest(val.Requires)
 		if err != nil {
-			fmt.Println(name, err)
-			return err
+			return fmt.Errorf("%s %s", name, err)
 		}
 		_, err = TypeTest(val.RequiresCategory)
 		if err != nil {
-			fmt.Println(name, err)
-			return err
+			return fmt.Errorf("%s %s", name, err)
 		}
 		_, err = TypeTest(val.Excludes)
 		if err != nil {
-			fmt.Println(name, err)
-			return err
+			return fmt.Errorf("%s %s", name, err)
 		}
 		_, err = TypeTest(val.DOM)
 		if err != nil {
-			fmt.Println(name, err)
-			return err
+			return fmt.Errorf("%s %s", name, err)
 		}
 		_, err = TypeTest(val.DNS)
 		if err != nil {
-			fmt.Println(name, err)
-			return err
+			return fmt.Errorf("%s %s", name, err)
 		}
 		_, err = TypeTest(val.HTML)
 		if err != nil {
-			fmt.Println(name, err)
-			return err
+			return fmt.Errorf("%s %s", name, err)
 		}
 		_, err = TypeTest(val.TEXT)
 		if err != nil {
-			fmt.Println(name, err)
-			return err
+			return fmt.Errorf("%s %s", name, err)
 		}
 		_, err = TypeTest(val.CSS)
 		if err != nil {
-			fmt.Println(name, err)
-			return err
+			return fmt.Errorf("%s %s", name, err)
 		}
 		_, err = TypeTest(val.Robots)
 		if err != nil {
-			fmt.Println(name, err)
-			return err
+			return fmt.Errorf("%s %s", name, err)
 		}
 		_, err = TypeTest(val.URL)
 		if err != nil {
-			fmt.Println(name, err)
-			return err
+			return fmt.Errorf("%s %s", name, err)
 		}
 		_, err = TypeTest(val.XHR)
 		if err != nil {
-			fmt.Println(name, err)
-			return err
+			return fmt.Errorf("%s %s", name, err)
 		}
 		_, err = TypeTest(val.Meta)
 		if err != nil {
-			fmt.Println(name, err)
-			return err
+			return fmt.Errorf("%s %s", name, err)
 		}
 		_, err = TypeTest(val.ScriptSrc)
 		if err != nil {
-			fmt.Println(name, err)
-			return err
+			return fmt.Errorf("%s %s", name, err)
 		}
-
 		// 测试ICON是否读取正常
 		if val.ICON != "" && !strings.Contains(val.ICON, "<") {
-			_, err = fs.ReadFile(wr_sub, fmt.Sprintf("src/drivers/webextension/images/icons/%s", val.ICON))
+			// new version
+			_, err = fs.ReadFile(wr_sub, fmt.Sprintf("src/images/icons/%s", val.ICON))
 			if err != nil {
-				log.Println(err)
+				// old version
+				_, err = fs.ReadFile(wr_sub, fmt.Sprintf("src/drivers/webextension/images/icons/%s", val.ICON))
+				if err != nil {
+					log.Println(err)
+				}
 			}
 			continue
 		}
@@ -154,32 +144,18 @@ func InitWappalyzerDB(wr embed.FS, file_ string) error {
 	return nil
 }
 
-func listdir(wr_sub fs.FS) {
-	dir, _ := fs.ReadDir(wr_sub, ".")
-	for i := 0; i < len(dir); i++ {
-		if dir[i].IsDir() {
-			sub, err := fs.Sub(wr_sub, dir[i].Name())
-			if err != nil {
-				continue
-			}
-			listdir(sub)
-			continue
-		}
-		fmt.Println(dir[i].Name())
-	}
-}
-
 /*
 // 如果需要读取ICON信息
 // 指纹识别: 读取ICON
-func (a *api) GetICON(c *gin.Context) {
-	icon := c.Query("icon")
-	readICON := wappalyzer.ReadICON(icon)
-	if strings.HasSuffix(icon, "svg") {
-		c.Header("Content-Type", "image/svg+xml")
+
+	func (a *api) GetICON(c *gin.Context) {
+		icon := c.Query("icon")
+		readICON := wappalyzer.ReadICON(icon)
+		if strings.HasSuffix(icon, "svg") {
+			c.Header("Content-Type", "image/svg+xml")
+		}
+		c.String(200, readICON)
 	}
-	c.String(200, readICON)
-}
 */
 func SetReadICONURL(url string) {
 	icon_url = url
@@ -257,9 +233,12 @@ func (w *Wappalyzer) GetFingers() map[string]Technologie {
 }
 
 func ReadICON(filename string) string {
-	icon, err := fs.ReadFile(wappalyzer_fs, "src/drivers/webextension/images/icons/"+filename)
+	icon, err := fs.ReadFile(wappalyzer_fs, "src/images/icons/"+filename)
 	if err != nil {
-		return ""
+		icon, err = fs.ReadFile(wappalyzer_fs, "src/drivers/webextension/images/icons/"+filename)
+		if err != nil {
+			return ""
+		}
 	}
 	return string(icon)
 }

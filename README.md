@@ -6,7 +6,7 @@
 
 ```bash
 cd cmd/wappalyzer
-git clone https://github.com/AliasIO/wappalyzer.git
+git clone https://github.com/dochne/wappalyzer.git
 go build -v -ldflags '-w -s' -gcflags '-N -l' -o test
 ./test https://www.baidu.com
 ```

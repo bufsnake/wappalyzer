@@ -114,7 +114,6 @@ func TypeDetect(inf interface{}) interface{} {
 	if ok {
 		return float64_
 	}
-
 	// 如果测试到达此步，需要调整上面代码
 	// 以下代码，对未知数据进行基础类型测试
 	switch val := inf.(type) {
