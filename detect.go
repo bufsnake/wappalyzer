@@ -86,7 +86,7 @@ func (w *Wappalyzer) DetectDNS(domain string) {
 		w.PrintError("dns error", err)
 		return
 	}
-
+	
 	recoards["MX"] = make([]string, 0)
 	recoards["TXT"] = make([]string, 0)
 	recoards["SOA"] = make([]string, 0)
@@ -408,7 +408,7 @@ func (w *Wappalyzer) dom() chromedp.Action {
 										w.PrintError(exception)
 										continue
 									}
-									if !res.Value.IsDefined() {
+									if !res.Value.IsValid() {
 										continue
 									}
 									w.setFinger(name, value, 100, "")
@@ -468,7 +468,7 @@ func (w *Wappalyzer) dom() chromedp.Action {
 											w.PrintError(exception)
 											continue
 										}
-										if !res.Value.IsDefined() {
+										if !res.Value.IsValid() {
 											continue
 										}
 										w.setFinger(name, value, 100, "")
